@@ -17,7 +17,7 @@
 		printf("Integer Overflow %lu\n", testInt);
 		return ERROR;
 	}
-	yylval = testInt;
+	yylval.ival =  (int) testInt;
 	return INTEGER;
 }
 ";" return SEMI;
