@@ -15,18 +15,21 @@
 %token <ival> OPEN
 %token <ival> CLOSE
 %token <ival> ERROR
+%type <ival> Line
 %type <ival> Fact
-%type <ival> Start
 %type <ival> Expr
 %type <ival> Term
 %%
 
-Start	:	Expr SEMI { printf("%d", $1); };
-Expr	:	Expr PLUS Term	{ $$ = $1 + $3; }
-		|	Expr MINUS Term	{ $$ = $1 - $3; }
+Start	:	Start Line 
+		|	;
+Line	:	SEMI 
+		|	Expr SEMI { printf("%d\n", $1); }
+Expr	:	Term PLUS Expr	{ $$ = $1 + $3; }
+		|	Term MINUS Expr	{ $$ = $1 - $3; }
 		|	Term {$$ = $1;};
-Term	:	Term MULT Fact	{ $$ = $1 * $3; }
-		|	Term DIV Fact	{ $$ = $1 / $3; }
+Term	:	Fact MULT Term	{ $$ = $1 * $3; }
+		|	Fact DIV Term	{ $$ = $1 / $3; }
 		|	Fact { $$ = $1; };
 Fact	:	OPEN Expr CLOSE { $$ = $2; }
 		|	INTEGER { $$ = $1; };
